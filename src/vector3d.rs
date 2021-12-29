@@ -1,15 +1,21 @@
-use std::ops::{Add, AddAssign, Sub, SubAssign, Mul, MulAssign, Div, DivAssign, Neg};
+use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Sub, SubAssign};
+
+use crate::point3d::Point3D;
 
 #[derive(Debug, Copy, Clone, PartialEq)]
 pub struct Vector3D {
     x: f64,
     y: f64,
-    z: f64
+    z: f64,
 }
 
 impl Vector3D {
     pub fn new(x: f64, y: f64, z: f64) -> Vector3D {
-        Vector3D {x, y, z}
+        Vector3D { x, y, z }
+    }
+
+    pub fn from_point3d(p: Point3D) -> Vector3D {
+        Vector3D::new(p.x(), p.y(), p.z())
     }
 
     pub fn zeroes() -> Vector3D {
@@ -29,7 +35,6 @@ impl Vector3D {
     pub fn y(self) -> f64 {
         self.y
     }
-    
     pub fn z(self) -> f64 {
         self.z
     }
@@ -43,14 +48,14 @@ impl Vector3D {
     }
 
     pub fn dot(self, rhs: Vector3D) -> f64 {
-        self.x * rhs.x + self.y * rhs.y + self.z * rhs.z 
+        self.x * rhs.x + self.y * rhs.y + self.z * rhs.z
     }
 
     pub fn cross(self, rhs: Vector3D) -> Vector3D {
         Vector3D::new(
             self.y * rhs.z - self.z * rhs.y,
             self.z * rhs.x - self.x * rhs.z,
-            self.x * rhs.y - self.y * rhs.x    
+            self.x * rhs.y - self.y * rhs.x,
         )
     }
 }
@@ -99,7 +104,6 @@ impl MulAssign<f64> for Vector3D {
 
 impl Div<f64> for Vector3D {
     type Output = Vector3D;
-    
     fn div(self, rhs: f64) -> Vector3D {
         Vector3D::new(self.x / rhs, self.y / rhs, self.z / rhs)
     }
@@ -130,6 +134,15 @@ mod creation_test {
         assert_eq!(v.x, 1.0);
         assert_eq!(v.y, 2.0);
         assert_eq!(v.z, 3.0);
+    }
+
+    #[test]
+    fn test_from_point3d() {
+        let lhs = Vector3D::from_point3d(Point3D::new(1.0, 2.0, 3.0));
+        
+        assert_eq!(lhs.x, 1.0);
+        assert_eq!(lhs.y, 2.0);
+        assert_eq!(lhs.z, 3.0);
     }
 
     #[test]
@@ -169,7 +182,6 @@ mod ops_test {
     #[test]
     fn test_ops_add_assign() {
         let mut lhs = Vector3D::new(1.0, 2.0, 3.0);
-     
         lhs += Vector3D::new(4.0, 5.0, 6.0);
 
         assert_eq!(lhs.x, 5.0);
@@ -204,7 +216,6 @@ mod ops_test {
         let lhs = Vector3D::new(1.0, 2.0, 3.0);
 
         let res = lhs * 2.0;
-        
         assert_eq!(res.x, 2.0);
         assert_eq!(res.y, 4.0);
         assert_eq!(res.z, 6.0);
@@ -229,7 +240,7 @@ mod ops_test {
 
         assert_eq!(res.x, 1.0);
         assert_eq!(res.y, 2.0);
-        assert_eq!(res.z, 3.0);       
+        assert_eq!(res.z, 3.0);
     }
 
     #[test]

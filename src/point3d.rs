@@ -1,6 +1,6 @@
-use std::ops::{
-    Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Sub, SubAssign,
-};
+use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Sub, SubAssign};
+
+use crate::vector3d::Vector3D;
 
 #[derive(Debug, Copy, Clone, PartialEq)]
 pub struct Point3D {
@@ -12,6 +12,10 @@ pub struct Point3D {
 impl Point3D {
     pub fn new(x: f64, y: f64, z: f64) -> Point3D {
         Point3D { x, y, z }
+    }
+
+    pub fn from_vector3d(v: Vector3D) -> Point3D {
+        Point3D::new(v.x(), v.y(), v.z())
     }
 
     pub fn zeroes() -> Point3D {
@@ -111,6 +115,15 @@ mod creation_test {
         assert_eq!(v.x, 1.0);
         assert_eq!(v.y, 2.0);
         assert_eq!(v.z, 3.0);
+    }
+
+    #[test]
+    fn test_from_vector3d() {
+        let lhs = Point3D::from_vector3d(Vector3D::new(1.0, 2.0, 3.0));
+        
+        assert_eq!(lhs.x, 1.0);
+        assert_eq!(lhs.y, 2.0);
+        assert_eq!(lhs.z, 3.0);
     }
 
     #[test]
