@@ -38,8 +38,12 @@ impl Vector3D {
     pub fn z(self) -> f64 {
         self.z
     }
-
+    
     pub fn length(self) -> f64 {
+        self.length_squared().sqrt()
+    }
+
+    pub fn length_squared(self) -> f64 {
         self.x * self.x + self.y * self.y + self.z * self.z
     }
 
@@ -281,17 +285,20 @@ mod utility_test {
 
     #[test]
     fn test_length() {
-        let lhs = Vector3D::ones();
-        assert_eq!(lhs.length(), 3.0);
+        let lhs = Vector3D::new(4.0, 4.0, 2.0);
+        assert_eq!(lhs.length(), 6.0);
+    }
 
-        let lhs = Vector3D::new(3.0, 5.0, -2.0);
-        assert_eq!(lhs.length(), 38.0);
+    #[test]
+    fn test_length_squared() {
+        let lhs = Vector3D::new(4.0, 4.0, 2.0);
+        assert_eq!(lhs.length_squared(), 36.0);    
     }
 
     #[test]
     fn test_unit() {
-        let lhs = Vector3D::new(2.0, 0.0, 2.0);
-        assert_eq!(lhs.unit(), Vector3D::new(0.25, 0.0, 0.25))
+        let lhs = Vector3D::new(1.0, 2.0, 3.0);
+        assert_eq!(lhs.unit().length(), 1.0)
     }
 
     #[test]
